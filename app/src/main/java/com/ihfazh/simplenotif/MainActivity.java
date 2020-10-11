@@ -10,20 +10,25 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String NOTIF_NAME = "test";
-    public static final String NOTIF_CHANNEL = "test_channel";
-    public static final int NOTIF_ID = 10;
+    public static final int NOTIFICATION_ID = 10;
+
+    public static final String CHANNEL_ID = "test";
+    public static final String CHANNEL_NAME = "test_channel";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+    }
+
+    private void sendNotification(View view) {
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIF_NAME)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_background)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_background))
                 .setContentTitle("Hello world")
@@ -32,9 +37,9 @@ public class MainActivity extends AppCompatActivity {
                 .setAutoCancel(true);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            NotificationChannel channel = new NotificationChannel(NOTIF_CHANNEL, NOTIF_NAME, NotificationManager.IMPORTANCE_HIGH);
-            channel.setDescription(NOTIF_CHANNEL.toString());
-            builder.setChannelId(NOTIF_CHANNEL);
+            NotificationChannel channel = new NotificationChannel(CHANNEL_NAME, CHANNEL_ID, NotificationManager.IMPORTANCE_HIGH);
+            channel.setDescription(CHANNEL_NAME.toString());
+            builder.setChannelId(CHANNEL_NAME);
 
             if (manager != null){
                 manager.createNotificationChannel(channel);
@@ -44,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         Notification notification = builder.build();
 
         if (manager != null){
-            manager.notify(NOTIF_ID, notification);
+            manager.notify(NOTIFICATION_ID, notification);
         }
     }
 }
